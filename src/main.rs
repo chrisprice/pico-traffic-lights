@@ -6,6 +6,7 @@ use defmt::*;
 use defmt_rtt as _;
 use embedded_hal::digital::v2::OutputPin;
 use panic_probe as _;
+use pico_traffic_lights::phases::Phase;
 use rp_pico::{entry, Pins, XOSC_CRYSTAL_FREQ};
 
 use rp_pico::hal::{
@@ -46,12 +47,25 @@ fn main() -> ! {
 
     let mut led_pin = pins.led.into_push_pull_output();
 
+    let mut phase = Phase::new();
+
     loop {
-        info!("on!");
-        led_pin.set_high().unwrap();
-        delay.delay_ms(500);
-        info!("off!");
-        led_pin.set_low().unwrap();
-        delay.delay_ms(500);
+        match phase {
+            Phase::Red => {
+                info!("Red");
+            }
+            Phase::StartingRedAmber => {
+                info!("StartingRedAmber");
+            }
+            Phase::Green => {
+                info!("Green");
+                led_pin.set_high().unwrap();
+            }
+            Phase::LeavingAmber => {
+                info!("LeavingAmber");
+                led_pin.set_low().unwrap();
+            }
+        }
+        phase.next(&mut delay);
     }
 }
