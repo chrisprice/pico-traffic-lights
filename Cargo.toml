@@ -22,6 +22,9 @@ rp-pico = "0.5"
 # rp2040-hal = { version="0.6", features=["rt"] }
 # rp2040-boot2 = "0.2"
 
+smart-leds = "0.3.0"
+ws2812-pio = "0.4.0"
+
 # cargo build/run
 [profile.dev]
 codegen-units = 1
